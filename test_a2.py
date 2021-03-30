@@ -22,6 +22,22 @@ class Part1Test(TestUtil):
     def tearDown(self) -> None:
         pass
 
+    def test_doc_1(self):
+        s = SudokuPuzzle(4, \
+                         [["A", "B", "C", "D"], \
+                          ["C", "D", " ", " "], \
+                          [" ", " ", " ", " "], \
+                          [" ", " ", " ", " "]], {"A", "B", "C", "D"})
+        assert s.fail_fast() == False
+
+    def test_doc_2(self):
+        s = SudokuPuzzle(4, \
+                         [["B", "D", "A", "C"], \
+                          ["C", "A", "B", "D"], \
+                          ["A", "B", " ", " "], \
+                          [" ", " ", " ", " "]], {"A", "B", "C", "D"})
+        assert s.fail_fast() == True
+
     def test_failfast_all_empty(self):
         """
         You cannot immediately determine the dead end of an empty board

@@ -299,20 +299,20 @@ class SudokuPuzzle(Puzzle):
         symbols, symbol_set, n = self._grid, self._symbol_set, self._n
         if not any(EMPTY_CELL in row for row in symbols):
             return False
-        # get position of first empty position
-        r = 0  # row with first empty position
-        while EMPTY_CELL not in symbols[r]:
-            r += 1
-        c = symbols[r].index(EMPTY_CELL)  # column with first empty position
 
-        # allowed symbols at position (r, c)
-        # A | B == A.union(B)
-        allowed_symbols = (self._symbol_set
-                           - (self._row_set(r)
-                              | self._column_set(c)
-                              | self._subsquare_set(r, c)))
-        if not allowed_symbols:
-            return True
+        for r in range(len(self._grid)):
+            for c in range(len(self._grid[r])):
+                if symbols[r][c] == EMPTY_CELL:
+                    # allowed symbols at position (r, c)
+                    # A | B == A.union(B)
+                    allowed_symbols = (self._symbol_set
+                                       - (self._row_set(r)
+                                          | self._column_set(c)
+                                          | self._subsquare_set(r, c)))
+                    if not allowed_symbols:
+                        return True
+                    else:
+                        pass
         return False
 
     # some private helper methods
@@ -360,7 +360,8 @@ class SudokuPuzzle(Puzzle):
         Hint: You should find the optional parameter, seen, for the Solver
         class' solve method very useful here.
         """
-
+        pass
+    
 
 if __name__ == "__main__":
     # any code you want to use for testing your code above
