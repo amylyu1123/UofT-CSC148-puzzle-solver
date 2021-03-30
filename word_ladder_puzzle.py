@@ -105,6 +105,8 @@ class WordLadderPuzzle(Puzzle):
         >>> wl1 == wl3
         True
         """
+        return self.from_word == other.from_word and self.to_word == \
+               other.to_word and self.word_set == other.word_set
 
     # TODO (Task 3): override __str__
     def __str__(self) -> str:
@@ -121,6 +123,7 @@ class WordLadderPuzzle(Puzzle):
         >>> print(wl2)
         me -> my
         """
+        return self.from_word + ' -> ' + self.to_word
 
     # TODO (Task 3): override is_solved
     # Note: A WordLadderPuzzle is solved when from_word is the same as its
@@ -136,6 +139,7 @@ class WordLadderPuzzle(Puzzle):
         >>> wl2.is_solved()
         False
         """
+        return self.from_word == self.to_word
 
     # TODO (Task 3): override extensions
     # legal extensions are valid WordLadderPuzzles that have a from_word that
@@ -158,6 +162,17 @@ class WordLadderPuzzle(Puzzle):
         >>> len(wl1_extensions) == 2
         True
         """
+        result = []
+        temp = self.from_word
+        for i in range(len(self.from_word)):
+            for j in range(len(LETTERS)):
+                if LETTERS[j] != temp[i]:
+                    x = temp[:i] + LETTERS[j] + temp[i+1:]
+                    if x in self.word_set:
+                        result.append(WordLadderPuzzle(x, self.to_word,
+                                                       self.word_set))
+        return result
+
 
     # TODO (Task 3): implement get_difficulty
     # Note: implementing this requires you to have completed Task 2

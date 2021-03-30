@@ -361,7 +361,7 @@ class SudokuPuzzle(Puzzle):
         class' solve method very useful here.
         """
         pass
-    
+
 
 if __name__ == "__main__":
     # any code you want to use for testing your code above
