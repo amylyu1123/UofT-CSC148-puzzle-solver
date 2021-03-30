@@ -64,7 +64,6 @@ class Solver:
         raise NotImplementedError
 
 
-# TODO (Task 2): implement the solve method in the DfsSolver class.
 # Your solve method MUST be a recursive function (i.e. it must make
 # at least one recursive call to itself)
 # You may NOT change the interface to the solve method.
@@ -91,8 +90,27 @@ class DfsSolver(Solver):
 
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
-        the solution.
+        the solution. (whose puzzle states can't be added to the path to the solution)
         """
+        if puzzle.is_solved():
+            return [puzzle]
+        if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+            return []
+        else:  # solvable and not in seen
+            result = [puzzle]
+            extensions = puzzle.extensions()
+            for extension in extensions:
+                solution = self.solve(extension)
+                if solution == []:
+                    if seen is None:
+                        seen = set(str(extension))
+                    else:
+                        seen.add(str(extension))
+                else:
+                    result.append(extension)
+            return result
+
+
 
 
 # TODO (Task 2): implement the solve method in the BfsSolver class.
