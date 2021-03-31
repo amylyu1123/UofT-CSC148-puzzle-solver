@@ -23,6 +23,7 @@ This module contains the word ladder puzzle class.
 from __future__ import annotations
 from typing import Optional, Set, List
 from puzzle import Puzzle
+from solver import BfsSolver
 
 
 # difficulty constants
@@ -199,6 +200,19 @@ class WordLadderPuzzle(Puzzle):
 
         IMPOSSIBLE - a solution does not exist
         """
+        solver = BfsSolver()
+        solution = solver.solve(self)
+        if len(solution) == 0:
+            return IMPOSSIBLE
+        elif len(solution) == 1 or len(solution) == 2:
+            return TRIVIAL
+        elif len(solution) == 3:
+            return EASY
+        elif 3 < len(solution) < 6:
+            return MEDIUM
+        else:
+            return HARD
+
 
 
 if __name__ == '__main__':
