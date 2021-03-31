@@ -30,6 +30,7 @@ Note: Some of the provided code makes use of list comprehensions
 from __future__ import annotations
 from typing import List, Set
 from puzzle import Puzzle
+from solver import DfsSolver, BfsSolver
 
 EMPTY_CELL = ' '
 
@@ -262,7 +263,6 @@ class SudokuPuzzle(Puzzle):
             return_lst.append(new_puzzle)
         return return_lst
 
-    # TODO (Task 1): override fail_fast
     # If there is an open position with no symbols available
     # (i.e. all symbols are already used in the same row, column, or subsquare),
     # then the sudoku puzzle is not solvable.
@@ -346,7 +346,6 @@ class SudokuPuzzle(Puzzle):
                 subsquare_symbols.append(self._grid[ul_row + i][ul_col + j])
         return set(subsquare_symbols)
 
-    # TODO (Task 2): implement has_unique_solution
     # Implement this method according to its docstring
     # You may import any modules that you need when implementing this method.
     def has_unique_solution(self) -> bool:
@@ -360,7 +359,14 @@ class SudokuPuzzle(Puzzle):
         Hint: You should find the optional parameter, seen, for the Solver
         class' solve method very useful here.
         """
-        pass
+        solver = DfsSolver()
+        all_states = solver.solve(self)
+        if all_states == []:
+            return False
+        seen = {str(all_states[-1])}
+        if solver.solve(self, seen) != []:
+            return False
+        return True
 
 
 if __name__ == "__main__":

@@ -103,7 +103,7 @@ class DfsSolver(Solver):
                 solution = self.solve(extension, seen)
                 if solution == []:
                     if seen is None:
-                        seen = set(str(extension))
+                        seen = {str(extension)}
                     else:
                         seen.add(str(extension))
                 else:
@@ -153,7 +153,7 @@ class BfsSolver(Solver):
                 solution = self.solve(curr, seen)
                 if solution == []:
                     if seen is None:
-                        seen = set(str(curr))
+                        seen = {str(curr)}
                     else:
                         seen.add(str(curr))
                 else:
