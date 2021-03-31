@@ -136,7 +136,7 @@ class ExprTree:
                     result += subtree.eval(lookup)
             return result
 
-        
+
 
     # TODO (Task 4): implement __str__s
     def __str__(self) -> str:
@@ -195,21 +195,26 @@ class ExprTree:
         True
         >>> t2 == ExprTree('*', [])
         False
+        >>> t1 = ExprTree(None, [])
+        >>> t1 == t2
+        False
         """
         if self.is_empty() and other.is_empty():
             return True
-        elif self.is_empty() or other.is_empty():
-            return False
+        # elif (not self.is_empty() and other.is_empty()) or (not other.is_empty() and self.is_empty()):
+        #     return False
+        elif not self.is_empty() and not other.is_empty():
         # both not empty
-        if self._root != other._root:
-            return False
-        elif len(self._subtrees) != len(other._subtrees):
-            return False
-        else:  
-            for i in range(len(self._subtrees)):
-                if self._subtrees[i] != other._subtrees[i]:
-                    return False
-            return True
+            if self._root != other._root:
+                return False
+            elif len(self._subtrees) != len(other._subtrees):
+                return False
+            else:
+                for i in range(len(self._subtrees)):
+                    if self._subtrees[i] != other._subtrees[i]:
+                        return False
+                return True
+        return False
 
     # TODO (Task 4): implement substitute
     def substitute(self, from_to: Dict[Union[str, int],
@@ -351,6 +356,35 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
+    if values == [[]]:
+        return ExprTree(None, [])
+    elif len(values) == 1:
+        return ExprTree(values[0][0], [])
+    else:  # len(values) > 1
+        exp_t = ExprTree(values[0][0], [])
+        q = Queue()
+        for i in range(1, len(values)):
+            q.enqueue(values[i])
+        while not q.is_empty():
+            curr = q.dequeue()
+            for i in range(len(curr)):
+                if curr[i] == '*' or curr[i] == '+':
+                    temp = [curr[i]]
+                    while not q.is_empty():
+                        temp.append(q.dequeue())
+                    exp_t.append(construct_from_list(temp))
+                else:
+                    exp_t.append(ExprTree(curr[i], []))
+        return exp_t
+
+
+
+
+
+
+
+
+
 
 
 
