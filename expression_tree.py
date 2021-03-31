@@ -36,6 +36,7 @@ OP_MULTIPLY = '*'
 OP_ADD = '+'
 OPERATORS = [OP_ADD, OP_MULTIPLY]
 
+LETTERS = "abcdefghijklmnopqrstuvwxyz"
 
 class ExprTree:
     """
@@ -118,8 +119,9 @@ class ExprTree:
         >>> exp_t.eval(look_up)
         31
         """
+        
 
-    # TODO (Task 4): implement __str__
+    # TODO (Task 4): implement __str__s
     def __str__(self) -> str:
         """
         Return a string representation of this expression tree
@@ -168,6 +170,15 @@ class ExprTree:
         >>> t2 == ExprTree('*', [])
         False
         """
+        if self.is_empty() and other.is_empty():
+            return True
+        elif self._root != other._root:
+            return False
+        elif self.is_empty() or other.is_empty():
+            return False
+        else:
+            for 
+
 
     # TODO (Task 4): implement substitute
     def substitute(self, from_to: Dict[Union[str, int],
@@ -207,6 +218,13 @@ class ExprTree:
         >>> len(look_up) == 1
         True
         """
+        if not self.is_empty() and self._root in LETTERS:
+            lookup[self._root] = 0
+        else:
+            for subtree in self._subtrees:
+                subtree.populate_lookup(lookup)
+
+        
 
     def append(self, child: ExprTree) -> None:
         """Append child to this ExprTree's list of subtrees.
@@ -293,6 +311,7 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
+
 
 
 # Provided visualization code - see an example usage at the bottom
