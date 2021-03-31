@@ -92,10 +92,10 @@ class DfsSolver(Solver):
         representations, whose puzzle states can't be any part of the path to
         the solution. (whose puzzle states can't be added to the path to the solution)
         """
+        if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+            return []
         if puzzle.is_solved():
             return [puzzle]
-        elif puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
-            return []
         else:  # solvable and not in seen
             result = [puzzle]
             extensions = puzzle.extensions()
@@ -138,10 +138,10 @@ class BfsSolver(Solver):
         representations, whose puzzle states can't be any part of the path to
         the solution.
         """
+        if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+            return []
         if puzzle.is_solved():
             return [puzzle]
-        elif puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
-            return []
         else:  # solvable and not in seen
             result = [puzzle]
             to_check = Queue()
