@@ -148,18 +148,18 @@ class BfsSolver(Solver):
             extensions = puzzle.extensions()
             for extension in extensions:
                 to_check.enqueue(extension)
-            curr = to_check.dequeue()
-            solution = self.solve(curr, seen)
-            if solution == []:
-                if seen is None:
-                    seen = set(str(curr))
+            while not to_check.is_empty():
+                curr = to_check.dequeue()
+                solution = self.solve(curr, seen)
+                if solution == []:
+                    if seen is None:
+                        seen = set(str(curr))
+                    else:
+                        seen.add(str(curr))
                 else:
-                    seen.add(str(curr))
-            else:
-                result.extend(solution)
-            return result
-
-
+                    result.extend(solution)
+                    return result
+            return []
 
 
 if __name__ == "__main__":
