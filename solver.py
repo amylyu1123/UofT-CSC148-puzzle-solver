@@ -86,7 +86,7 @@ class DfsSolver(Solver):
         the puzzle one step closer to a solution, which is represented by the
         last item in the list.
 
-        Return an empty list if the puzzle has no solution.
+        Return an empty list if the puzzle has no solution.(?)
 
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
@@ -94,26 +94,24 @@ class DfsSolver(Solver):
         """
         if puzzle.is_solved():
             return [puzzle]
-        if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+        elif puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
             return []
         else:  # solvable and not in seen
             result = [puzzle]
             extensions = puzzle.extensions()
             for extension in extensions:
-                solution = self.solve(extension)
+                solution = self.solve(extension, seen)
                 if solution == []:
                     if seen is None:
                         seen = set(str(extension))
                     else:
                         seen.add(str(extension))
                 else:
-                    result.append(extension)
-            return result
+                    result.extend(solution)
+                    return result
+            return []
 
 
-
-
-# TODO (Task 2): implement the solve method in the BfsSolver class.
 # Hint: You may find a Queue useful here.
 class BfsSolver(Solver):
     """"
@@ -140,6 +138,28 @@ class BfsSolver(Solver):
         representations, whose puzzle states can't be any part of the path to
         the solution.
         """
+        if puzzle.is_solved():
+            return [puzzle]
+        elif puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+            return []
+        else:  # solvable and not in seen
+            result = [puzzle]
+            to_check = Queue()
+            extensions = puzzle.extensions()
+            for extension in extensions:
+                to_check.enqueue(extension)
+            curr = to_check.dequeue()
+            solution = self.solve(curr, seen)
+            if solution == []:
+                if seen is None:
+                    seen = set(str(curr))
+                else:
+                    seen.add(str(curr))
+            else:
+                result.extend(solution)
+            return result
+
+
 
 
 if __name__ == "__main__":
