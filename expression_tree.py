@@ -119,6 +119,7 @@ class ExprTree:
         >>> exp_t.eval(look_up)
         31
         """
+
         
 
     # TODO (Task 4): implement __str__s
@@ -152,6 +153,9 @@ class ExprTree:
         >>> print(exp_t)
         (3 + (x * y) + x)
         """
+        if isinstance(self._root, int) or self._root in LETTERS:
+            
+
 
     # TODO (Task 4): implement __eq__
     def __eq__(self, other: ExprTree) -> bool:
@@ -172,12 +176,19 @@ class ExprTree:
         """
         if self.is_empty() and other.is_empty():
             return True
-        elif self._root != other._root:
-            return False
         elif self.is_empty() or other.is_empty():
             return False
-        else:
-            for 
+        # both not empty
+        if self._root != other._root:
+            return False
+        elif len(self._subtrees) != len(other._subtrees):
+            return False
+        else:  
+            for i in range(len(self._subtrees)):
+                if self._subtrees[i] != other._subtrees[i]:
+                    return False
+            return True
+
 
 
     # TODO (Task 4): implement substitute
@@ -218,7 +229,7 @@ class ExprTree:
         >>> len(look_up) == 1
         True
         """
-        if not self.is_empty() and self._root in LETTERS:
+        if not self.is_empty() and str(self._root) in LETTERS:
             lookup[self._root] = 0
         else:
             for subtree in self._subtrees:
