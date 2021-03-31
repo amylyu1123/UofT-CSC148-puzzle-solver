@@ -119,6 +119,22 @@ class ExprTree:
         >>> exp_t.eval(look_up)
         31
         """
+        if self.is_empty():
+            return 0
+        elif isinstance(self._root, int):
+            return self._root
+        elif self._root in lookup:
+            return lookup[self._root]
+        else:  # operator
+            result = 0
+            for subtree in self._subtrees:
+                if self._root == '*':
+                    if result == 0:
+                        result = 1
+                    result *= subtree.eval(lookup)
+                if self._root == '+':
+                    result += subtree.eval(lookup)
+            return result
 
         
 
@@ -153,9 +169,15 @@ class ExprTree:
         >>> print(exp_t)
         (3 + (x * y) + x)
         """
-        if isinstance(self._root, int) or self._root in LETTERS:
-            
-
+        if self.is_empty():
+            return '()'
+        if isinstance(self._root, int) or str(self._root) in LETTERS:
+            return str(self._root)
+        else:  # operator
+            result = '('
+            for i in range(len(self._subtrees) - 1):
+                result += str(self._subtrees[i]) + ' ' + str(self._root) + ' '
+            return result + str(self._subtrees[-1]) + ')'
 
     # TODO (Task 4): implement __eq__
     def __eq__(self, other: ExprTree) -> bool:
@@ -189,8 +211,6 @@ class ExprTree:
                     return False
             return True
 
-
-
     # TODO (Task 4): implement substitute
     def substitute(self, from_to: Dict[Union[str, int],
                                        Union[str, int]]) -> None:
@@ -213,6 +233,17 @@ class ExprTree:
         >>> print(exp_t)
         (2 + (2 + 1))
         """
+        if self.is_empty():
+            pass
+        elif self._root in from_to:
+            self._root = from_to[self._root]
+            for subtree in self._subtrees:
+                subtree.substitute(from_to)
+        else:  # not empty and self._root not in from_to
+            for subtree in self._subtrees:
+                subtree.substitute(from_to)
+
+
 
     # TODO (Task 4): implement populate_lookup
     def populate_lookup(self, lookup: Dict[str, int]) -> None:
@@ -234,8 +265,6 @@ class ExprTree:
         else:
             for subtree in self._subtrees:
                 subtree.populate_lookup(lookup)
-
-        
 
     def append(self, child: ExprTree) -> None:
         """Append child to this ExprTree's list of subtrees.
