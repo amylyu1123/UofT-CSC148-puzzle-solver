@@ -296,6 +296,24 @@ class SudokuPuzzle(Puzzle):
         >>> s.fail_fast()
         True
         """
+        symbols, symbol_set, n = self._grid, self._symbol_set, self._n
+        if not any(EMPTY_CELL in row for row in symbols):
+            return False
+
+        for r in range(len(self._grid)):
+            for c in range(len(self._grid[r])):
+                if symbols[r][c] == EMPTY_CELL:
+                    # allowed symbols at position (r, c)
+                    # A | B == A.union(B)
+                    allowed_symbols = (self._symbol_set
+                                       - (self._row_set(r)
+                                          | self._column_set(c)
+                                          | self._subsquare_set(r, c)))
+                    if not allowed_symbols:
+                        return True
+                    else:
+                        pass
+        return False
 
     # some private helper methods
     # Note: these return sets of symbols you may find useful
@@ -342,6 +360,7 @@ class SudokuPuzzle(Puzzle):
         Hint: You should find the optional parameter, seen, for the Solver
         class' solve method very useful here.
         """
+        pass
 
 
 if __name__ == "__main__":
