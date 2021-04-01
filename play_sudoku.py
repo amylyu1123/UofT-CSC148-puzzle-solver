@@ -40,7 +40,7 @@ from solver import DfsSolver
 from sudoku_puzzle import SudokuPuzzle, EMPTY_CELL
 
 # You can configure the settings here
-N = 4  # puzzle size - suggested is either 4 or 9 (untested on 16)
+N = 9  # puzzle size - suggested is either 4 or 9 (untested on 16)
 
 # Pick how many numbers you want in the grid
 # Don't pick this too small or it might be slow to generate a puzzle for you!

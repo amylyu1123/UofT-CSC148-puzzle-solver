@@ -86,7 +86,7 @@ class DfsSolver(Solver):
         the puzzle one step closer to a solution, which is represented by the
         last item in the list.
 
-        Return an empty list if the puzzle has no solution.(?)
+        Return an empty list if the puzzle has no solution.
 
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
@@ -99,6 +99,10 @@ class DfsSolver(Solver):
         else:  # solvable and not in seen
             result = [puzzle]
             extensions = puzzle.extensions()
+            if seen is None:
+                seen = {str(puzzle)}
+            else:
+                seen.add(str(puzzle))
             for extension in extensions:
                 solution = self.solve(extension, seen)
                 if solution == []:
@@ -142,23 +146,25 @@ class BfsSolver(Solver):
             return []
         if puzzle.is_solved():
             return [puzzle]
-        else:  # solvable and not in seen
-            result = [puzzle]
-            to_check = Queue()
+        else: 
+            if seen is None:
+                seen = {str(puzzle)}
+            else:
+                seen.add(str(puzzle))
             extensions = puzzle.extensions()
-            for extension in extensions:
-                to_check.enqueue(extension)
-            while not to_check.is_empty():
-                curr = to_check.dequeue()
-                solution = self.solve(curr, seen)
-                if solution == []:
-                    if seen is None:
-                        seen = {str(curr)}
-                    else:
-                        seen.add(str(curr))
+            q = Queue()
+            for i in range(len(extensions)):
+                q.enqueue([puzzle, extensions[i]])
+            while not q.is_empty():
+                curr_path = q.dequeue()
+                if curr_path[-1].fail_fast() or str(curr_path[-1]) in seen:
+                    seen.add(str(curr_path[-1]))
+                elif curr_path[-1].is_solved():
+                    return curr_path
                 else:
-                    result.extend(solution)
-                    return result
+                    extensions = curr_path[-1].extensions()
+                    for i in range(len(extensions)):
+                        q.enqueue(curr_path + [extensions[i]])
             return []
 
 

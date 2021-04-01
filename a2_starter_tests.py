@@ -41,6 +41,9 @@ from expression_tree import ExprTree, construct_from_list
 from expression_tree_puzzle import ExpressionTreePuzzle
 from solver import BfsSolver, DfsSolver
 
+import sys
+sys.setrecursionlimit(4000)
+
 
 # Below is an incomplete set of tests: these tests are mostly the provided
 # doctest examples.
@@ -307,11 +310,69 @@ def test_expression_tree_puzzle_fail_fast_true() -> None:
     assert puz.fail_fast() is True
 
 
+def test_expression_tree_puzzle_fail_fast_1() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+    puz.variables['a'] = 2
+
+    assert puz.fail_fast() is True
+
+
+def test_expression_tree_puzzle_fail_fast_2() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 8)
+    puz.variables['a'] = 2
+
+    assert puz.fail_fast() is False
+
+
+def test_expression_tree_puzzle_fail_fast_3() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('+', [ExprTree('*', \
+                                            [ExprTree('a', []), \
+                                             ExprTree('+', [ExprTree('b', []), \
+                                                            ExprTree(6, []), \
+                                                            ExprTree(6, []), \
+                                                           ])]), \
+                                   ExprTree(5, [])])
+    #  ((a * (b + 6 + 6)) + 5)
+    puz = ExpressionTreePuzzle(exp_t, 8)
+    puz.variables['a'] = 1
+
+    assert puz.fail_fast() is True
+
 def test_expression_tree_puzzle_fail_fast_false() -> None:
     """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
     exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
     puz = ExpressionTreePuzzle(exp_t, 7)
     puz.variables['a'] = 2
+
+    assert puz.fail_fast() is False
+
+
+def test_non_assgin() -> None:
+    exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+
+    assert puz.fail_fast() is False
+
+
+def test_all_assgin() -> None:
+    exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+    puz.variables['a'] = 2
+    puz.variables['b'] = 2
+
+    assert puz.fail_fast() is True
+
+
+def test_times_with_1() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+    puz.variables['a'] = 1
 
     assert puz.fail_fast() is False
 

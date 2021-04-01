@@ -265,10 +265,10 @@ class Part2Test(TestUtil):
                                ['9', '7', '2', '4', '8', '6', '3', '5',
                                 '1']
                                ], {str(i) for i in range(1, 10)})
-        res = self.dfs_solver.solve(self.board_9_9, {str(sol)})
-        self.assertTrue(len(res) == 7)
-        self.assertTrue(res[-1].is_solved())
         for _ in range(1000):
+            res = self.dfs_solver.solve(self.board_9_9, {str(sol)})
+            self.assertTrue(len(res) == 7)
+            self.assertTrue(res[-1].is_solved())
             self.assertSoduku(
                 SudokuPuzzle(9, [['2', '8', '6', '1', '5', '9', '7', '4',
                                   '3'],

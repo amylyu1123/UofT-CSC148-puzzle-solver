@@ -126,14 +126,18 @@ class ExprTree:
         elif self._root in lookup:
             return lookup[self._root]
         else:  # operator
-            result = 0
+            result = -1
             for subtree in self._subtrees:
                 if self._root == '*':
-                    if result == 0:
-                        result = 1
-                    result *= subtree.eval(lookup)
+                    if result == -1:
+                        result = subtree.eval(lookup)
+                    else:
+                        result *= subtree.eval(lookup)
                 if self._root == '+':
-                    result += subtree.eval(lookup)
+                    if result == -1:
+                        result = subtree.eval(lookup)
+                    else:
+                        result += subtree.eval(lookup)
             return result
 
 
@@ -201,20 +205,29 @@ class ExprTree:
         """
         if self.is_empty() and other.is_empty():
             return True
-        # elif (not self.is_empty() and other.is_empty()) or (not other.is_empty() and self.is_empty()):
-        #     return False
         elif not self.is_empty() and not other.is_empty():
-        # both not empty
             if self._root != other._root:
                 return False
-            elif len(self._subtrees) != len(other._subtrees):
-                return False
             else:
-                for i in range(len(self._subtrees)):
-                    if self._subtrees[i] != other._subtrees[i]:
-                        return False
-                return True
+                return self._subtrees == other._subtrees
         return False
+
+        # if self.is_empty() and other.is_empty():
+        #     return True
+        # elif not self.is_empty() and not other.is_empty():
+        #     # both not empty
+        #     if self._root != other._root:
+        #         return False
+        #     else:
+        #         return self._subtrees == other._subtrees
+        #     # elif len(self._subtrees) != len(other._subtrees):
+        #     #     return False
+        #     # else:
+        #     #     for i in range(len(self._subtrees)):
+        #     #         if self._subtrees[i] != other._subtrees[i]:
+        #     #             return False
+        #     #     return True
+        # return False
 
     # TODO (Task 4): implement substitute
     def substitute(self, from_to: Dict[Union[str, int],
@@ -339,8 +352,8 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
           You will likely want to use this method.
 
     Precondition:
-    <values> encodes a valid expression tree
-
+    <values> encodes a valid expression tree.
+    <values> is for a non-empty expression tree.
 
     >>> example = [[5]]
     >>> exp_t = construct_from_list(example)
@@ -356,9 +369,7 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
-    if values == [[]]:
-        return ExprTree(None, [])
-    elif len(values) == 1:
+    if len(values) == 1:
         return ExprTree(values[0][0], [])
     else:  # len(values) > 1
         exp_t = ExprTree(values[0][0], [])
@@ -369,23 +380,11 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
             curr = q.dequeue()
             for i in range(len(curr)):
                 if curr[i] == '*' or curr[i] == '+':
-                    temp = [curr[i]]
-                    while not q.is_empty():
-                        temp.append(q.dequeue())
-                    exp_t.append(construct_from_list(temp))
+                    next_lst = q.dequeue()
+                    exp_t.append(construct_from_list([[curr[i]], next_lst]))
                 else:
                     exp_t.append(ExprTree(curr[i], []))
         return exp_t
-
-
-
-
-
-
-
-
-
-
 
 
 # Provided visualization code - see an example usage at the bottom
