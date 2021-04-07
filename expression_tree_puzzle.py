@@ -62,16 +62,12 @@ class ExpressionTreePuzzle(Puzzle):
         >>> puz.target
         4
         """
-        result = {}
-
-        self.target = target
 
         self.variables = {}
         tree.populate_lookup(self.variables)
         self._tree = tree
         self.target = target
 
-    # TODO (Task 5) override is_solved
     def is_solved(self) -> bool:
         """
         Return True iff ExpressionTreePuzzle self is solved.
@@ -96,9 +92,6 @@ class ExpressionTreePuzzle(Puzzle):
                 return False
         return self._tree.eval(self.variables) == self.target
 
-        
-        
-    # TODO (Task 5) override __str__
     def __str__(self) -> str:
         """
         Return a string representation of this ExpressionTreePuzzle.
@@ -119,10 +112,9 @@ class ExpressionTreePuzzle(Puzzle):
         {'a': 0, 'b': 0}
         ((a * (b + 6 + 6)) + 5) = 61
         """
-        return str(self.variables) + '\n' + str(self._tree) + ' = ' + str(self.target)
+        return str(self.variables) + '\n' + str(self._tree) + ' = ' + \
+            str(self.target)
 
-
-    # TODO (Task 5) override extensions
     def extensions(self) -> List[ExpressionTreePuzzle]:
         """
         Return the list of legal extensions of this ExpressionTreePuzzle.
@@ -160,7 +152,6 @@ class ExpressionTreePuzzle(Puzzle):
                     result.append(puz)
         return result
 
-    # TODO (TASK 5): override fail_fast
     # The specifics of how you implement this are up to you.
     # Hint 1: remember that a puzzle can only be extended by assigning a value
     #         to an unassigned variable.
@@ -175,18 +166,17 @@ class ExpressionTreePuzzle(Puzzle):
         if not self.is_solved():
             if self.extensions() == []:  # all variables assigned to 1-9
                 return True
-            else:
-                count = 0
-                for var in self.variables:
-                    if self.variables[var] == 0:
-                        count += 1
-                if count == 1:
-                    for extension in self.extensions():
-                        if extension.is_solved():
-                            return False
-                    return True
+            count = 0
+            for var in self.variables:
+                if self.variables[var] == 0:
+                    count += 1
+            for extension in self.extensions():
+                if extension.is_solved():
+                    return False
+            if count == 1:
+                return True
         return False
-            
+
 
 if __name__ == "__main__":
     import python_ta

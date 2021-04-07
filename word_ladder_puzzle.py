@@ -159,22 +159,24 @@ class WordLadderPuzzle(Puzzle):
         >>> len(wl1_extensions) == 2
         True
         """
+        temp_lst = []
         result = []
         temp = self.from_word
         for i in range(len(self.from_word)):
             for j in range(len(LETTERS)):
                 if LETTERS[j] != temp[i]:
                     x = temp[:i] + LETTERS[j] + temp[i + 1:]
-                    result.append(self._help_me2(x))
+                    temp_lst.append(self._help_me2(x))
+        for element in temp_lst:
+            if element is not None:
+                result.append(element)
         return result
 
-    def _help_me2(self, x: str) -> WordLadderPuzzle:
+    def _help_me2(self, x: str) -> Optional[WordLadderPuzzle]:
         """This is a helper function for extensions"""
         if x in self.word_set:
-            curr = []
-            y = WordLadderPuzzle(x, self.to_word, self.word_set)
-            if curr is not None:
-                return y
+            return WordLadderPuzzle(x, self.to_word, self.word_set)
+        return None
 
     # Note: implementing this requires you to have completed Task 2
     # Hint: Think about which of BfsSolver and DfsSolver is the right

@@ -166,6 +166,7 @@ class BfsSolver(Solver):
                     q.enqueue(curr_path + [extension])
         return []
 
+
 if __name__ == "__main__":
     import python_ta
 
