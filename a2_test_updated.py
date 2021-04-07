@@ -346,6 +346,30 @@ class Part2Test(TestUtil):
     def test_unique_solution_5(self):
         self.assertFalse(self.fail_board.has_unique_solution())
 
+    def test_unique_solution_6(self):
+        s_not_unique = SudokuPuzzle(9,
+                                    [[' ', '8', ' ', ' ', ' ', '9', '7', '4',
+                                      '3'],
+                                     [' ', '5', ' ', ' ', ' ', '8', ' ', '1',
+                                      ' '],
+                                     [' ', '1', ' ', ' ', ' ', ' ', ' ', ' ',
+                                      ' '],
+                                     ['8', ' ', ' ', ' ', ' ', '5', ' ', ' ',
+                                      ' '],
+                                     [' ', ' ', ' ', '8', ' ', '4', ' ', ' ',
+                                      ' '],
+                                     [' ', ' ', ' ', '3', ' ', ' ', ' ', ' ',
+                                      '6'],
+                                     [' ', ' ', ' ', ' ', ' ', ' ', ' ', '7',
+                                      ' '],
+                                     [' ', '3', ' ', '5', ' ', ' ', ' ', '8',
+                                      ' '],
+                                     ['9', '7', '2', '4', ' ', ' ', ' ', '5',
+                                      ' ']],
+                                    {'1', '2', '3', '4', '5', '6', '7', '8',
+                                     '9'})
+        assert not s_not_unique.has_unique_solution()
+
 
 class Part3Test(TestUtil):
     def setUp(self) -> None:
@@ -440,35 +464,35 @@ class Part3Test(TestUtil):
         ladder = WordLadderPuzzle('bb', 'cc', {'bb', 'bc', 'cc'})
         res = ladder.get_difficulty()
         self.assertTrue(mock_solver.called)
-        self.assertTrue(res, TRIVIAL)
+        self.assertEqual(res, TRIVIAL)
 
     @patch('solver.BfsSolver.solve', return_value=[1, 2, 3])
     def test_get_difficulty_2(self, mock_solver):
         ladder = WordLadderPuzzle('bb', 'cc', {'bb', 'bc', 'cc'})
         res = ladder.get_difficulty()
         self.assertTrue(mock_solver.called)
-        self.assertTrue(res, EASY)
+        self.assertEqual(res, EASY)
 
     @patch('solver.BfsSolver.solve', return_value=[1, 2, 3, 4])
     def test_get_difficulty_3(self, mock_solver):
         ladder = WordLadderPuzzle('bb', 'cc', {'bb', 'bc', 'cc'})
         res = ladder.get_difficulty()
         self.assertTrue(mock_solver.called)
-        self.assertTrue(res, MEDIUM)
+        self.assertEqual(res, MEDIUM)
 
     @patch('solver.BfsSolver.solve', return_value=[1, 2, 3, 4, 5, 6])
     def test_get_difficulty_4(self, mock_solver):
         ladder = WordLadderPuzzle('bb', 'cc', {'bb', 'bc', 'cc'})
         res = ladder.get_difficulty()
         self.assertTrue(mock_solver.called)
-        self.assertTrue(res, HARD)
+        self.assertEqual(res, HARD)
 
     @patch('solver.BfsSolver.solve', return_value=[])
     def test_get_difficulty_5(self, mock_solver):
         ladder = WordLadderPuzzle('bb', 'cc', {'bb', 'bc', 'cc'})
         res = ladder.get_difficulty()
         self.assertTrue(mock_solver.called)
-        self.assertTrue(res, IMPOSSIBLE)
+        self.assertEqual(res, IMPOSSIBLE)
 
 
 class Part4Test(TestUtil):
@@ -713,6 +737,8 @@ class Part5Test(TestUtil):
         self.assertTrue(len(ext) == 18)
         for sub in ext:
             self.assertTrue(len(sub.extensions()) == 9)
+
+
 
 
 if __name__ == '__main__':

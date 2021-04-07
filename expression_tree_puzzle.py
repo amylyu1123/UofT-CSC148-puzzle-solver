@@ -173,7 +173,14 @@ class ExpressionTreePuzzle(Puzzle):
             if self.extensions() == []:  # all variables assigned to 1-9
                 return True
             else:
-                if self._tree.eval(self.variables) > self.target:
+                count = 0
+                for var in self.variables:
+                    if self.variables[var] == 0:
+                        count += 1
+                if count == 1:
+                    for extension in self.extensions():
+                        if extension.is_solved():
+                            return False
                     return True
         return False
             

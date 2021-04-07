@@ -369,22 +369,17 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
-    if len(values) == 1:
-        return ExprTree(values[0][0], [])
-    else:  # len(values) > 1
-        exp_t = ExprTree(values[0][0], [])
-        q = Queue()
-        for i in range(1, len(values)):
-            q.enqueue(values[i])
-        while not q.is_empty():
-            curr = q.dequeue()
-            for i in range(len(curr)):
-                if curr[i] == '*' or curr[i] == '+':
-                    next_lst = q.dequeue()
-                    exp_t.append(construct_from_list([[curr[i]], next_lst]))
-                else:
-                    exp_t.append(ExprTree(curr[i], []))
-        return exp_t
+    exp_t = ExprTree(values[0][0], [])
+    q = Queue()
+    q.enqueue(exp_t)
+    for i in range(1, len(values)):
+        curr = q.dequeue()
+        for j in range(len(values[i])):
+            child = ExprTree(values[i][j], [])
+            curr.append(child)
+            if values[i][j] == '*' or values[i][j] == '+':
+                q.enqueue(child)
+    return exp_t
 
 
 # Provided visualization code - see an example usage at the bottom

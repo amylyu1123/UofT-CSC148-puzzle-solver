@@ -30,7 +30,7 @@ Note: Some of the provided code makes use of list comprehensions
 from __future__ import annotations
 from typing import List, Set
 from puzzle import Puzzle
-from solver import DfsSolver, BfsSolver
+from solver import DfsSolver
 
 EMPTY_CELL = ' '
 
