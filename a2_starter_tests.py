@@ -203,8 +203,10 @@ def test_expression_tree_construct_from_list_doctest() -> None:
     exp_t = construct_from_list(example)
     assert str(exp_t) == '5'
 
+def test_WWW_():
     example = [['+'], [3, 'a']]
     exp_t = construct_from_list(example)
+    print(str(exp_t))
     assert str(exp_t) == '(3 + a)'
 
 
@@ -352,13 +354,22 @@ def test_expression_tree_puzzle_fail_fast_false() -> None:
     assert puz.fail_fast() is False
 
 
+<<<<<<< Updated upstream
 def test_non_assgin() -> None:
     exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
     puz = ExpressionTreePuzzle(exp_t, 7)
+=======
+def test_times_with_1() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+    puz.variables['a'] = 1
+>>>>>>> Stashed changes
 
     assert puz.fail_fast() is False
 
 
+<<<<<<< Updated upstream
 def test_all_assgin() -> None:
     exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
     puz = ExpressionTreePuzzle(exp_t, 7)
@@ -375,6 +386,15 @@ def test_times_with_1() -> None:
     puz.variables['a'] = 1
 
     assert puz.fail_fast() is False
+=======
+def test_times_with_1_2() -> None:
+    """Test ExpressionTreePuzzle.fail_fast on a solvable puzzle."""
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+    puz = ExpressionTreePuzzle(exp_t, 7)
+    puz.variables['a'] = 2
+
+    assert puz.fail_fast() is True
+>>>>>>> Stashed changes
 
 
 if __name__ == '__main__':

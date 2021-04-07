@@ -90,7 +90,6 @@ class WordLadderPuzzle(Puzzle):
         # set of characters to use for 1-character changes
         self._chars = LETTERS
 
-    # TODO (Task 3): override __eq__
     def __eq__(self, other: WordLadderPuzzle) -> bool:
         """
         Return whether WordLadderPuzzle self is equivalent to other.
@@ -107,9 +106,8 @@ class WordLadderPuzzle(Puzzle):
         True
         """
         return self.from_word == other.from_word and self.to_word == \
-               other.to_word and self.word_set == other.word_set
+            other.to_word and self.word_set == other.word_set
 
-    # TODO (Task 3): override __str__
     def __str__(self) -> str:
         """
         Return a human-friendly string representing this WordLadderPuzzle's
@@ -126,7 +124,6 @@ class WordLadderPuzzle(Puzzle):
         """
         return self.from_word + ' -> ' + self.to_word
 
-    # TODO (Task 3): override is_solved
     # Note: A WordLadderPuzzle is solved when from_word is the same as its
     # to_word
     def is_solved(self) -> bool:
@@ -142,7 +139,6 @@ class WordLadderPuzzle(Puzzle):
         """
         return self.from_word == self.to_word
 
-    # TODO (Task 3): override extensions
     # legal extensions are valid WordLadderPuzzles that have a from_word that
     # differs from this WordLadderPuzzle's from_word by exactly one character
     def extensions(self) -> List[WordLadderPuzzle]:
@@ -168,14 +164,18 @@ class WordLadderPuzzle(Puzzle):
         for i in range(len(self.from_word)):
             for j in range(len(LETTERS)):
                 if LETTERS[j] != temp[i]:
-                    x = temp[:i] + LETTERS[j] + temp[i+1:]
-                    if x in self.word_set:
-                        result.append(WordLadderPuzzle(x, self.to_word,
-                                                       self.word_set))
+                    x = temp[:i] + LETTERS[j] + temp[i + 1:]
+                    result.append(self._help_me2(x))
         return result
 
+    def _help_me2(self, x: str) -> WordLadderPuzzle:
+        """This is a helper function for extensions"""
+        if x in self.word_set:
+            curr = []
+            y = WordLadderPuzzle(x, self.to_word, self.word_set)
+            if curr is not None:
+                return y
 
-    # TODO (Task 3): implement get_difficulty
     # Note: implementing this requires you to have completed Task 2
     # Hint: Think about which of BfsSolver and DfsSolver is the right
     #       solver for the task at hand. (You may add any required
@@ -212,7 +212,6 @@ class WordLadderPuzzle(Puzzle):
             return MEDIUM
         else:
             return HARD
-
 
 
 if __name__ == '__main__':

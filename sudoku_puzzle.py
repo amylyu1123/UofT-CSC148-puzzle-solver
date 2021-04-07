@@ -296,24 +296,28 @@ class SudokuPuzzle(Puzzle):
         >>> s.fail_fast()
         True
         """
-        symbols, symbol_set, n = self._grid, self._symbol_set, self._n
-        if not any(EMPTY_CELL in row for row in symbols):
-            return False
 
         for r in range(len(self._grid)):
             for c in range(len(self._grid[r])):
-                if symbols[r][c] == EMPTY_CELL:
-                    # allowed symbols at position (r, c)
-                    # A | B == A.union(B)
-                    allowed_symbols = (self._symbol_set
-                                       - (self._row_set(r)
-                                          | self._column_set(c)
-                                          | self._subsquare_set(r, c)))
-                    if not allowed_symbols:
-                        return True
-                    else:
-                        pass
+                if self._help_me(r, c):
+                    return True
         return False
+
+    def _help_me(self, r: int, c: int) -> bool:
+        """A helper function for fail_fast"""
+        if self._grid[r][c] != EMPTY_CELL:
+            return False
+        else:
+            # allowed symbols at position (r, c)
+            # A | B == A.union(B)
+            allowed_symbols = (self._symbol_set
+                               - (self._row_set(r)
+                                  | self._column_set(c)
+                                  | self._subsquare_set(r, c)))
+            if not allowed_symbols:
+                return True
+            else:
+                return False
 
     # some private helper methods
     # Note: these return sets of symbols you may find useful

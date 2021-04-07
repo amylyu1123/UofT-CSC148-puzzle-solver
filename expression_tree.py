@@ -36,7 +36,8 @@ OP_MULTIPLY = '*'
 OP_ADD = '+'
 OPERATORS = [OP_ADD, OP_MULTIPLY]
 
-LETTERS = "abcdefghijklmnopqrstuvwxyz"
+LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+NUMBERS = '123456789'
 
 class ExprTree:
     """
@@ -140,6 +141,20 @@ class ExprTree:
                         result += subtree.eval(lookup)
             return result
 
+<<<<<<< Updated upstream
+=======
+        if self.is_empty():
+            return 0
+        elif isinstance(self._root, int) and self._subtrees == []:
+            return self._root
+        elif self._root in lookup and self._subtrees == []:
+            return lookup[self._root]
+        else:
+            result = 0
+            for subtree in self._subtrees:
+                result += subtree.eval(lookup)
+            return result
+>>>>>>> Stashed changes
 
 
     # TODO (Task 4): implement __str__s
@@ -205,6 +220,7 @@ class ExprTree:
         """
         if self.is_empty() and other.is_empty():
             return True
+<<<<<<< Updated upstream
         elif not self.is_empty() and not other.is_empty():
             if self._root != other._root:
                 return False
@@ -228,6 +244,20 @@ class ExprTree:
         #     #             return False
         #     #     return True
         # return False
+=======
+        elif self.is_empty() or other.is_empty():
+            return False
+        # both not empty
+        if self._root != other._root:
+            return False
+        elif len(self._subtrees) != len(other._subtrees):
+            return False
+        else:
+            for i in range(len(self._subtrees)):
+                if self._subtrees[i] != other._subtrees[i]:
+                    return False
+            return True
+>>>>>>> Stashed changes
 
     # TODO (Task 4): implement substitute
     def substitute(self, from_to: Dict[Union[str, int],
@@ -369,6 +399,7 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
+<<<<<<< Updated upstream
     exp_t = ExprTree(values[0][0], [])
     q = Queue()
     q.enqueue(exp_t)
@@ -380,6 +411,60 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
             if values[i][j] == '*' or values[i][j] == '+':
                 q.enqueue(child)
     return exp_t
+=======
+    if len(values) == 1:
+        return ExprTree(values[0][0], [])
+    else:  # len(values) > 1
+<<<<<<< Updated upstream
+        exp_t = ExprTree(values[0][0], [])
+        q = Queue()
+        for i in range(1, len(values)):
+            q.enqueue(values[i])
+        while not q.is_empty():
+            curr = q.dequeue()
+            for i in range(len(curr)):
+                if curr[i] == '*' or curr[i] == '+':
+                    next_lst = q.dequeue()
+                    exp_t.append(construct_from_list([[curr[i]], next_lst]))
+                else:
+                    exp_t.append(ExprTree(curr[i], []))
+        return exp_t
+=======
+    q = Queue()
+    for i in range(1, len(values)):
+        q.enqueue(values[i])
+    exp_t = ExprTree(values[0][0], [])
+
+    temp1 = q.dequeue()
+    for x in temp1:
+        curr = ExprTree(x, [])
+        if x == '+' or '*':
+           temp2 = q.dequeue()
+
+
+
+
+    # if values == [[]]:
+    #     return ExprTree(None, [])
+    # elif len(values) == 1:
+    #     return ExprTree(values[0][0], [])
+    # else:  # len(values) > 1
+    #     exp_t = ExprTree(values[0][0], [])
+    #     q = Queue()
+    #     for i in range(1, len(values)):
+    #         q.enqueue(values[i])
+    #     while not q.is_empty():
+    #         curr = q.dequeue()
+    #         print(len(curr))
+    #         for i in range(len(curr)):
+    #             if curr[i] == '*' or curr[i] == '+':
+    #                 next_lst = q.dequeue()
+    #                 exp_t.append(construct_from_list([[curr[i]], next_lst]))
+    #             else:
+    #                 exp_t.append(ExprTree(curr[i], []))
+    #     return exp_t
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 
 # Provided visualization code - see an example usage at the bottom

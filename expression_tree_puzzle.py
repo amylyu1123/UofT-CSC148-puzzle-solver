@@ -62,6 +62,9 @@ class ExpressionTreePuzzle(Puzzle):
         >>> puz.target
         4
         """
+        result = {}
+
+        self.target = target
 
         self.variables = {}
         tree.populate_lookup(self.variables)
