@@ -90,30 +90,29 @@ class DfsSolver(Solver):
 
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
-        the solution. (whose puzzle states can't be added to the path to the solution)
+        the solution.
         """
         if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
             return []
         if puzzle.is_solved():
             return [puzzle]
-        else:  # solvable and not in seen
-            result = [puzzle]
-            extensions = puzzle.extensions()
-            if seen is None:
-                seen = {str(puzzle)}
-            else:
-                seen.add(str(puzzle))
-            for extension in extensions:
-                solution = self.solve(extension, seen)
-                if solution == []:
-                    if seen is None:
-                        seen = {str(extension)}
-                    else:
-                        seen.add(str(extension))
+        result = [puzzle]
+        extensions = puzzle.extensions()
+        if seen is None:
+            seen = {str(puzzle)}
+        else:
+            seen.add(str(puzzle))
+        for extension in extensions:
+            solution = self.solve(extension, seen)
+            if solution == []:
+                if seen is None:
+                    seen = {str(extension)}
                 else:
-                    result.extend(solution)
-                    return result
-            return []
+                    seen.add(str(extension))
+            else:
+                result.extend(solution)
+                return result
+        return []
 
 
 # Hint: You may find a Queue useful here.
@@ -146,26 +145,26 @@ class BfsSolver(Solver):
             return []
         if puzzle.is_solved():
             return [puzzle]
-        else: 
-            if seen is None:
-                seen = {str(puzzle)}
+
+        if seen is None:
+            seen = {str(puzzle)}
+        else:
+            seen.add(str(puzzle))
+        extensions = puzzle.extensions()
+        q = Queue()
+        for i in range(len(extensions)):
+            q.enqueue([puzzle, extensions[i]])
+        while not q.is_empty():
+            curr_path = q.dequeue()
+            if curr_path[-1].fail_fast() or str(curr_path[-1]) in seen:
+                seen.add(str(curr_path[-1]))
+            elif curr_path[-1].is_solved():
+                return curr_path
             else:
-                seen.add(str(puzzle))
-            extensions = puzzle.extensions()
-            q = Queue()
-            for i in range(len(extensions)):
-                q.enqueue([puzzle, extensions[i]])
-            while not q.is_empty():
-                curr_path = q.dequeue()
-                if curr_path[-1].fail_fast() or str(curr_path[-1]) in seen:
-                    seen.add(str(curr_path[-1]))
-                elif curr_path[-1].is_solved():
-                    return curr_path
-                else:
-                    extensions = curr_path[-1].extensions()
-                    for i in range(len(extensions)):
-                        q.enqueue(curr_path + [extensions[i]])
-            return []
+                extensions = curr_path[-1].extensions()
+                for extension in extensions:
+                    q.enqueue(curr_path + [extension])
+        return []
 
 
 if __name__ == "__main__":
