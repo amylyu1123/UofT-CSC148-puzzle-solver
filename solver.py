@@ -152,8 +152,8 @@ class BfsSolver(Solver):
             seen.add(str(puzzle))
         extensions = puzzle.extensions()
         q = Queue()
-        for i in range(len(extensions)):
-            q.enqueue([puzzle, extensions[i]])
+        for extension in extensions:
+            q.enqueue([puzzle, extension])
         while not q.is_empty():
             curr_path = q.dequeue()
             if curr_path[-1].fail_fast() or str(curr_path[-1]) in seen:
@@ -161,6 +161,7 @@ class BfsSolver(Solver):
             elif curr_path[-1].is_solved():
                 return curr_path
             else:
+                seen.add(str(curr_path[-1]))
                 extensions = curr_path[-1].extensions()
                 for extension in extensions:
                     q.enqueue(curr_path + [extension])

@@ -163,7 +163,7 @@ class WordLadderPuzzle(Puzzle):
         result = []
         temp = self.from_word
         for i in range(len(self.from_word)):
-            for j in range(len(LETTERS)):
+            for j in range(len(self._chars)):
                 if LETTERS[j] != temp[i]:
                     x = temp[:i] + LETTERS[j] + temp[i + 1:]
                     temp_lst.append(self._help_me2(x))

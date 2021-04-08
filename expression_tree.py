@@ -126,15 +126,15 @@ class ExprTree:
         elif self._root in lookup:
             return lookup[self._root]
         # operator
-        result = -1
+        result = None
         for subtree in self._subtrees:
             if self._root == '*':
-                if result == -1:
+                if result is None:
                     result = subtree.eval(lookup)
                 else:
                     result *= subtree.eval(lookup)
             if self._root == '+':
-                if result == -1:
+                if result is None:
                     result = subtree.eval(lookup)
                 else:
                     result += subtree.eval(lookup)
@@ -229,13 +229,9 @@ class ExprTree:
         >>> print(exp_t)
         (2 + (2 + 1))
         """
-        if self.is_empty():
-            pass
-        elif self._root in from_to:
-            self._root = from_to[self._root]
-            for subtree in self._subtrees:
-                subtree.substitute(from_to)
-        else:  # not empty and self._root not in from_to
+        if not self.is_empty():
+            if self._root in from_to:
+                self._root = from_to[self._root]
             for subtree in self._subtrees:
                 subtree.substitute(from_to)
 
@@ -253,9 +249,9 @@ class ExprTree:
         >>> len(look_up) == 1
         True
         """
-        if not self.is_empty() and str(self._root) in LETTERS:
-            lookup[self._root] = 0
-        else:
+        if not self.is_empty():
+            if str(self._root) in LETTERS:
+                lookup[self._root] = 0
             for subtree in self._subtrees:
                 subtree.populate_lookup(lookup)
 
